@@ -3,43 +3,37 @@ import {
   Get,
   HttpCode,
   Post,
-  Header,
+  // Header,
   Param,
   Body,
   ValidationPipe,
 } from '@nestjs/common';
 import { AddMemberDto } from './class.dto';
+import { ClassService } from './class.service';
+import { ClassMember } from './class.interface';
 
 @Controller('class')
 // HttpCode Get(200) by default while Post(201) by default, but can change by a @HttpCode decorator.
 export class ClassController {
+  constructor(private classService: ClassService) {}
+
   @Get('info')
   @HttpCode(200)
   async getClassInfo() {
-    return { class: 'This class has no students and teachers.' };
+    return this.classService.getClassInfo();
   }
 
   @Post('add')
-  // you can customize your own header by @Header decorator.
-  @Header('customizeHeader', 'my-own-key')
   @HttpCode(200)
+  // TODO: about ValidationPipe, will learn later...
   async addAClassMember(@Body(ValidationPipe) addMemberDto: AddMemberDto) {
-    console.log(addMemberDto);
-    return 'This action adds a new cat';
+    this.classService.addClassMember(addMemberDto);
   }
 
-  // @Get('docs')
-  // @Redirect('https://docs.nestjs.com', 302)
-  // getDocs(@Query('version') version) {
-  //   if (version && version === '5') {
-  //     return { url: 'https://docs.nestjs.com/v5/' };
-  //   }
+  // @Get('member/:id')
+  // // you can make a param after your request
+  // async getOneMember(@Param('id') id: number) {
+  //   console.log(id);
+  //   return `This action returns a #${id} cat`;
   // }
-
-  @Get('member/:id')
-  // you can make a param after your request
-  async getOneMember(@Param('id') id: number) {
-    console.log(id);
-    return `This action returns a #${id} cat`;
-  }
 }
