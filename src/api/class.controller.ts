@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   ValidationPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AddMemberDto } from './class.dto';
 import { ClassService } from './class.service';
@@ -26,14 +27,14 @@ export class ClassController {
   @Post('add')
   @HttpCode(200)
   // TODO: about ValidationPipe, will learn later...
-  async addAClassMember(@Body(ValidationPipe) addMemberDto: AddMemberDto) {
+  async addAClassMember(@Body() addMemberDto: AddMemberDto) {
     this.classService.addClassMember(addMemberDto);
   }
 
-  // @Get('member/:id')
-  // // you can make a param after your request
-  // async getOneMember(@Param('id') id: number) {
-  //   console.log(id);
-  //   return `This action returns a #${id} cat`;
-  // }
+  @Get('member/:id')
+  // you can make a param after your request
+  async getOneMember(@Param('id', ParseIntPipe) id: number) {
+    console.log(id);
+    return `This action returns a #${id} cat`;
+  }
 }
