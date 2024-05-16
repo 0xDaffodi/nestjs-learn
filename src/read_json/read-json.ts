@@ -16,8 +16,8 @@ export class ReadJsonService {
         // timeZone: 'Asia/Shanghai'
     })
     async getLatestLearniverseText() {
-        const path = './clone/learniverse-text';
-        const git = simplegit('./clone');
+        const path = 'src/clone/learniverse-text';
+        const git = simplegit('src/clone');
         // if in clone folder, there is no files, then clone this repo; if already have files, pull this repo.
         try {
             if (!fs.existsSync(path)) {
@@ -30,13 +30,13 @@ export class ReadJsonService {
             console.error('Failed to get latest learniverse-text:', err);
         }
         // read json from local git repo
-        const stagesPath = './clone/learniverse-text/stages.json';
+        const stagesPath = 'src/clone/learniverse-text/stages.json';
         const stagesData = JSON.parse(fs.readFileSync(stagesPath, 'utf8'));
         // MENTION: use 'map' to simplify the code.
         this.content = stagesData.stages.map((stage, i) => {
             const levels = stage.levels.map((level, p) => {
                 const chapters = level.chapters.map((chapter, n) => {
-                    const thisChaperPath = `./clone/learniverse-text/stage${i + 1}/level${level.index}/chapter${n + 1}`;
+                    const thisChaperPath = `src/clone/learniverse-text/stage${i + 1}/level${level.index}/chapter${n + 1}`;
                     const thisChapterData = fs.readFileSync(thisChaperPath, 'utf8');
                     return {
                         name: chapter.name,
