@@ -11,7 +11,7 @@ export class ReadJsonService {
     // MENTION: can use the CronExpression package to use the general cron format by nestjs
     // MENTION: also, you can use @Interval to make a repeated task
     // MENTION: automatic get the latest json file and git
-    @Cron(CronExpression.EVERY_2_HOURS, {
+    @Cron(CronExpression.EVERY_HOUR, {
         name: 'getLatestLearniverseText'
         // timeZone: 'Asia/Shanghai'
     })
