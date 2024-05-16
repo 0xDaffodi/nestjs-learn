@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from '@nestjs/schedule';
 import simplegit from 'simple-git';
 import * as fs from 'fs';
-import { Stage, Level, Chapter } from "src/api/content.entity";
+import { Stage } from "src/api/content.entity";
 
 @Injectable()
 export class ReadJsonService {
@@ -57,44 +57,5 @@ export class ReadJsonService {
                 levels
             };
         });
-        // for (let i = 0; i < stagesData.stages.length; i++) {
-        //     let thisStage: Stage = {
-        //         name: "",
-        //         index: 0,
-        //         levels: []
-        //     };
-        //     thisStage.name = stagesData.stages[i].name;
-        //     thisStage.index = stagesData.stages[i].index;
-        //     for (let p = 0; p < stagesData.stages[i].levels.length; p++) {
-        //         let thisLevel: Level = {
-        //             name: "",
-        //             index: 0,
-        //             chapters: []
-        //         };
-        //         thisLevel.name = stagesData.stages[i].levels[p].name;
-        //         thisLevel.index = stagesData.stages[i].levels[p].index;
-        //         for (let n = 0; n < stagesData.stages[i].levels[p].chapters.length; n++) {
-        //             let thisChapter: Chapter = {
-        //                 name: "",
-        //                 index_hidden: 0,
-        //                 summary: "",
-        //                 text: ""
-        //             };
-        //             thisChapter.name = stagesData.stages[i].levels[p].chapters[n].name;
-        //             thisChapter.index_hidden = stagesData.stages[i].levels[p].chapters[n].index_hidden;
-        //             thisChapter.summary = stagesData.stages[i].levels[p].chapters[n].summary;
-        //             const thisChaperPath = `./clone/learniverse-text/stage${i+1}/level${thisLevel.index}/chapter${n+1}`;
-        //             const thisChapterData = fs.readFileSync(thisChaperPath, 'utf8');
-        //             thisChapter.text = thisChapterData;
-        //             // push to []
-        //             thisLevel.chapters.push(thisChapter);
-        //         }
-        //         // push to []
-        //         thisStage.levels.push(thisLevel);
-        //     }
-        //     // push to []
-        //     this.content.push(thisStage);
-        // }
     }
-
 }

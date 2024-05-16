@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { ClassMember } from "./class.interface";
 import { ReadJsonService } from "src/read_json/read-json";
 
 @Injectable()
