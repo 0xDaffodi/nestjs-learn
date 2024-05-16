@@ -2,30 +2,27 @@ import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from '@nestjs/schedule';
 import simplegit from 'simple-git';
 import * as fs from 'fs';
+import { Stage, Level, Chapter } from "src/api/content.entity";
 
 @Injectable()
 export class ReadJsonService {
-    // TODO: Cron Task
-    // TODO: Read Json
-    // TODO: register in ClassModule
+    public content: Stage[] = [];
+    
     // MENTION: can use the CronExpression package to use the general cron format by nestjs
     // MENTION: also, you can use @Interval to make a repeated task
     // MENTION: automatic get the latest json file and git
-    @Cron(CronExpression.EVERY_10_MINUTES, {
+    @Cron(CronExpression.EVERY_2_HOURS, {
         name: 'getLatestLearniverseText'
         // timeZone: 'Asia/Shanghai'
     })
     async getLatestLearniverseText() {
         const path = './clone/learniverse-text';
         const git = simplegit('./clone');
-        // TODO: 如果temp下没有文件，则clone；如果已经有了，则git pull更新。
+        // if in clone folder, there is no files, then clone this repo; if already have files, pull this repo.
         try {
-            // 检查 temp 目录是否存在 learniverse-text 仓库
             if (!fs.existsSync(path)) {
-                // 如果不存在,则克隆仓库
                 await git.clone('https://github.com/0xDaffodi/learniverse-text');
             } else {
-                // 如果存在,则进入仓库目录并执行 git pull 更新
                 const repo = git.cwd(path);
                 await repo.pull();
             }
@@ -33,7 +30,71 @@ export class ReadJsonService {
             console.error('Failed to get latest learniverse-text:', err);
         }
         // read json from local git repo
-        // const jsonData = JSON.parse(fs.readFileSync('./path/to/local/repo/file.json', 'utf8'));
+        const stagesPath = './clone/learniverse-text/stages.json';
+        const stagesData = JSON.parse(fs.readFileSync(stagesPath, 'utf8'));
+        // MENTION: use 'map' to simplify the code.
+        this.content = stagesData.stages.map((stage, i) => {
+            const levels = stage.levels.map((level, p) => {
+                const chapters = level.chapters.map((chapter, n) => {
+                    const thisChaperPath = `./clone/learniverse-text/stage${i + 1}/level${level.index}/chapter${n + 1}`;
+                    const thisChapterData = fs.readFileSync(thisChaperPath, 'utf8');
+                    return {
+                        name: chapter.name,
+                        index_hidden: chapter.index_hidden,
+                        summary: chapter.summary,
+                        text: thisChapterData
+                    };
+                });
+                return {
+                    name: level.name,
+                    index: level.index,
+                    chapters
+                };
+            });
+            return {
+                name: stage.name,
+                index: stage.index,
+                levels
+            };
+        });
+        // for (let i = 0; i < stagesData.stages.length; i++) {
+        //     let thisStage: Stage = {
+        //         name: "",
+        //         index: 0,
+        //         levels: []
+        //     };
+        //     thisStage.name = stagesData.stages[i].name;
+        //     thisStage.index = stagesData.stages[i].index;
+        //     for (let p = 0; p < stagesData.stages[i].levels.length; p++) {
+        //         let thisLevel: Level = {
+        //             name: "",
+        //             index: 0,
+        //             chapters: []
+        //         };
+        //         thisLevel.name = stagesData.stages[i].levels[p].name;
+        //         thisLevel.index = stagesData.stages[i].levels[p].index;
+        //         for (let n = 0; n < stagesData.stages[i].levels[p].chapters.length; n++) {
+        //             let thisChapter: Chapter = {
+        //                 name: "",
+        //                 index_hidden: 0,
+        //                 summary: "",
+        //                 text: ""
+        //             };
+        //             thisChapter.name = stagesData.stages[i].levels[p].chapters[n].name;
+        //             thisChapter.index_hidden = stagesData.stages[i].levels[p].chapters[n].index_hidden;
+        //             thisChapter.summary = stagesData.stages[i].levels[p].chapters[n].summary;
+        //             const thisChaperPath = `./clone/learniverse-text/stage${i+1}/level${thisLevel.index}/chapter${n+1}`;
+        //             const thisChapterData = fs.readFileSync(thisChaperPath, 'utf8');
+        //             thisChapter.text = thisChapterData;
+        //             // push to []
+        //             thisLevel.chapters.push(thisChapter);
+        //         }
+        //         // push to []
+        //         thisStage.levels.push(thisLevel);
+        //     }
+        //     // push to []
+        //     this.content.push(thisStage);
+        // }
     }
 
 }

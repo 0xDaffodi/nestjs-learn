@@ -4,9 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClassController } from './api/class.controller';
-import { ClassService } from './api/class.service';
-import { ClassModule } from './api/class.module';
+import { ContentController } from './api/content.controller';
+import { ContentService } from './api/content.service';
+import { ContentModule } from './api/content.module';
 // MENTION: open 'cron' schedule module!
 import { ScheduleModule } from '@nestjs/schedule';
 
@@ -19,7 +19,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     //   load: [configuration],
     // }),
     ScheduleModule.forRoot(),
-    ClassModule
+    ContentModule
   ],
   controllers: [AppController],
   providers: [AppService],

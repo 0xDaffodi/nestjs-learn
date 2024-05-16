@@ -3,9 +3,7 @@ import { ClassMember } from "./class.interface";
 import { ReadJsonService } from "src/read_json/read-json";
 
 @Injectable()
-export class ClassService {
-    private readonly classMembers: ClassMember[] = [];
-
+export class ContentService {
     constructor(
         private readonly readJsonService: ReadJsonService,
     ) {
@@ -13,15 +11,15 @@ export class ClassService {
         readJsonService.getLatestLearniverseText();        
     }
 
-    async getClassInfo() {
-        if (this.classMembers.length === 0) {
-            throw new HttpException('There are no members in this class.', HttpStatus.BAD_REQUEST);
-        } else {
-            return this.classMembers;
+    async getAllContent() {
+        if (this.readJsonService.content.length <= 0) {
+            throw new HttpException('Sync git error', HttpStatus.BAD_GATEWAY);
+        }
+
+        return {
+            content: this.readJsonService.content
         }
     }
 
-    async addClassMember(newMember: ClassMember) {
-        this.classMembers.push(newMember);
-    }
+
 }
