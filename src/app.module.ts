@@ -7,6 +7,9 @@ import { AppService } from './app.service';
 import { ClassController } from './api/class.controller';
 import { ClassService } from './api/class.service';
 import { ClassModule } from './api/class.module';
+// MENTION: open 'cron' schedule module!
+import { ScheduleModule } from '@nestjs/schedule';
+
 
 @Module({
   imports: [
@@ -15,6 +18,7 @@ import { ClassModule } from './api/class.module';
     //   isGlobal: true,
     //   load: [configuration],
     // }),
+    ScheduleModule.forRoot(),
     ClassModule
   ],
   controllers: [AppController],
@@ -43,7 +47,7 @@ export class AppModule {}
         }
         ===========================================================
         */
-      // 4. make server can git pull and restart 
+      // 4. make server can git pull and restart ✅
       // 5. make apis, frontend WITH backend
       // 6. change ip url to customize url
       // 7. connect to database
