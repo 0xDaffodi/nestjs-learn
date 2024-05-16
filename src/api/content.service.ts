@@ -7,7 +7,7 @@ export class ContentService {
         private readonly readJsonService: ReadJsonService,
     ) {
         // MENTION: when start this program, run this task first.
-        // readJsonService.getLatestLearniverseText();        
+        readJsonService.getLatestLearniverseText();        
     }
 
     async getAllContent() {
