@@ -8,6 +8,8 @@ async function bootstrap() {
   // MENTION: set a global prefix
   app.setGlobalPrefix('v1');
 
+  console.log("backend version 1.0");
+
   await app.listen(3000);
 }
 bootstrap();
