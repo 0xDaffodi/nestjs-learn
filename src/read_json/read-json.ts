@@ -30,6 +30,7 @@ export class ReadJsonService {
             console.error('Failed to get latest learniverse-text:', err);
         }
         // read json from local git repo
+        // TODO: 做一个防止git出错的机制，如果git这次抓取没有抓到东西。不能在覆盖content了，需要沿用之前抓好的content
         const stagesPath = 'src/clone/learniverse-text/stages.json';
         const stagesData = JSON.parse(fs.readFileSync(stagesPath, 'utf8'));
         // MENTION: use 'map' to simplify the code.
