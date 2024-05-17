@@ -7,6 +7,6 @@ async function bootstrap() {
 
   console.log("backend version 1.0.1");
 
-  await app.listen(3000);
+  await app.listen(6000);
 }
 bootstrap();
